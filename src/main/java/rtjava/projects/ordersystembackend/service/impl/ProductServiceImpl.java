@@ -33,8 +33,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDto updateProduct(ProductDto productDto) {
-        return null;
+    public ProductDto updateProduct(Long productId, ProductDto updatedProductDto) {
+        Product product = productRepository.findById(productId).
+                orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + productId));
+        product.setName(updatedProductDto.getName());
+        product.setPrice(updatedProductDto.getPrice());
+        Product savedProduct = productRepository.save(product);
+        return ProductMapper.mapToProductDto(savedProduct);
     }
 
     @Override
@@ -49,4 +54,12 @@ public class ProductServiceImpl implements ProductService {
         List<Product> products = productRepository.findAll();
         return products.stream().map(ProductMapper::mapToProductDto).collect(Collectors.toList());
     }
+
+    @Override
+    public void deleteProduct(Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + productId));
+        productRepository.deleteById(productId);
+    }
+
 }
