@@ -1,6 +1,8 @@
 package rtjava.projects.ordersystembackend.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -8,26 +10,28 @@ public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;                 // Primary key for the row
+    private Long id;  // Primary key for the order
 
-    private Long orderId;            // Logical order identifier (all rows with same orderId belong to the same 'order')
-    private Long userId;             // ID of the user placing the order
-    private Long productId;          // ID of the product in this particular row
-    private Integer quantity;        // Quantity of the given product
-    private Double singleProductPrice;  // The product price at the time of ordering (immutable)
+    private Long userId;  // ID of the user placing the order
+
+    private LocalDateTime orderTime;  // Timestamp of the order
+
+    private Double totalPrice;  // Total price of the order
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> items;  // List of order items
 
     // No-argument constructor
     public Order() {
     }
 
     // All-arguments constructor
-    public Order(Long id, Long orderId, Long userId, Long productId, Integer quantity, Double singleProductPrice) {
+    public Order(Long id, Long userId, LocalDateTime orderTime, Double totalPrice, List<OrderItem> items) {
         this.id = id;
-        this.orderId = orderId;
         this.userId = userId;
-        this.productId = productId;
-        this.quantity = quantity;
-        this.singleProductPrice = singleProductPrice;
+        this.orderTime = orderTime;
+        this.totalPrice = totalPrice;
+        this.items = items;
     }
 
     // Getters and Setters
@@ -40,14 +44,6 @@ public class Order {
         this.id = id;
     }
 
-    public Long getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
-    }
-
     public Long getUserId() {
         return userId;
     }
@@ -56,27 +52,27 @@ public class Order {
         this.userId = userId;
     }
 
-    public Long getProductId() {
-        return productId;
+    public LocalDateTime getOrderTime() {
+        return orderTime;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setOrderTime(LocalDateTime orderTime) {
+        this.orderTime = orderTime;
     }
 
-    public Integer getQuantity() {
-        return quantity;
+    public Double getTotalPrice() {
+        return totalPrice;
     }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
+    public void setTotalPrice(Double totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
-    public Double getSingleProductPrice() {
-        return singleProductPrice;
+    public List<OrderItem> getItems() {
+        return items;
     }
 
-    public void setSingleProductPrice(Double singleProductPrice) {
-        this.singleProductPrice = singleProductPrice;
+    public void setItems(List<OrderItem> items) {
+        this.items = items;
     }
 }

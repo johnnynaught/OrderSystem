@@ -7,6 +7,7 @@ import rtjava.projects.ordersystembackend.entity.Order;
 import rtjava.projects.ordersystembackend.exception.ResourceNotFoundException;
 import rtjava.projects.ordersystembackend.mapper.OrderMapper;
 import rtjava.projects.ordersystembackend.repository.OrderRepository;
+import rtjava.projects.ordersystembackend.repository.ShoppingCartRepository;
 import rtjava.projects.ordersystembackend.service.OrderService;
 
 import java.util.List;
@@ -16,52 +17,33 @@ import java.util.stream.Collectors;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
+    private final ShoppingCartRepository shoppingCartRepository;
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository) {
+    public OrderServiceImpl(OrderRepository orderRepository, ShoppingCartRepository shoppingCartRepository) {
         this.orderRepository = orderRepository;
+        this.shoppingCartRepository = shoppingCartRepository;
     }
 
     @Override
     public OrderDto createOrder(OrderDto orderDto) {
-        // Convert DTO to entity
         Order order = OrderMapper.mapToOrder(orderDto);
-        // Save in DB
         Order savedOrder = orderRepository.save(order);
-        // Convert entity back to DTO
-        return OrderMapper.mapToOrderDto(savedOrder);
-    }
 
-    @Override
-    public OrderDto updateOrder(Long id, OrderDto updatedOrderDto) {
-        // Find the order, throw if not found
-        Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + id));
-
-        // Update fields
-        order.setOrderId(updatedOrderDto.getOrderId());
-        order.setUserId(updatedOrderDto.getUserId());
-        order.setProductId(updatedOrderDto.getProductId());
-        order.setQuantity(updatedOrderDto.getQuantity());
-        order.setSingleProductPrice(updatedOrderDto.getSingleProductPrice());
-
-        // Save changes
-        Order savedOrder = orderRepository.save(order);
-        // Convert to DTO
+        shoppingCartRepository.deleteAll();
         return OrderMapper.mapToOrderDto(savedOrder);
     }
 
     @Override
     public OrderDto getOrderById(Long id) {
         Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with ID: " + id));
         return OrderMapper.mapToOrderDto(order);
     }
 
     @Override
     public List<OrderDto> getAllOrders() {
-        List<Order> orders = orderRepository.findAll();
-        return orders.stream()
+        return orderRepository.findAll().stream()
                 .map(OrderMapper::mapToOrderDto)
                 .collect(Collectors.toList());
     }
@@ -69,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void deleteOrder(Long id) {
         Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with ID: " + id));
         orderRepository.delete(order);
     }
 }

@@ -1,38 +1,22 @@
 package rtjava.projects.ordersystembackend.entity;
 
-
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "products")
 public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //@Column(name = "name")
-    private String name;
+    private String title;
+    private String description;
     private Double price;
+    private String image;
+    private String category; // New field for product category
+    private Integer quantity; // New field for product stock quantity
 
-    // Default (no-argument) constructor
-    public Product() {
-    }
-
-    // All-arguments constructor
-    public Product(Long id, String name, Double price) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-    }
-
-    // Getters and Setters
-
+    // Getters and setters
     public Long getId() {
         return id;
     }
@@ -41,12 +25,20 @@ public class Product {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Double getPrice() {
@@ -55,5 +47,29 @@ public class Product {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 }

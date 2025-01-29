@@ -5,25 +5,25 @@ import rtjava.projects.ordersystembackend.entity.ShoppingCart;
 
 public class ShoppingCartMapper {
 
-    public static ShoppingCart mapToShoppingCart(ShoppingCartDto cartDto) {
-        ShoppingCart cart = new ShoppingCart();
-        cart.setId(cartDto.getId());
-        cart.setCartId(cartDto.getCartId());
-        cart.setUserId(cartDto.getUserId());
-        cart.setProductId(cartDto.getProductId());
-        cart.setQuantity(cartDto.getQuantity());
-        cart.setTotalPrice(cartDto.getTotalPrice());
-        return cart;
+    // Map ShoppingCart entity to ShoppingCartDto
+    public static ShoppingCartDto mapToShoppingCartDto(ShoppingCart cart) {
+        return new ShoppingCartDto(
+                cart.getProductId(),
+                cart.getTitle(),
+                cart.getImage(),
+                cart.getPrice(),
+                cart.getQuantity()
+        );
     }
 
-    public static ShoppingCartDto mapToShoppingCartDto(ShoppingCart cart) {
-        ShoppingCartDto cartDto = new ShoppingCartDto();
-        cartDto.setId(cart.getId());
-        cartDto.setCartId(cart.getCartId());
-        cartDto.setUserId(cart.getUserId());
-        cartDto.setProductId(cart.getProductId());
-        cartDto.setQuantity(cart.getQuantity());
-        cartDto.setTotalPrice(cart.getTotalPrice());
-        return cartDto;
+    // Map ShoppingCartDto to ShoppingCart entity
+    public static ShoppingCart mapToShoppingCart(ShoppingCartDto cartDto) {
+        ShoppingCart cart = new ShoppingCart();
+        cart.setProductId(cartDto.getProductId());
+        cart.setTitle(cartDto.getTitle());
+        cart.setImage(cartDto.getImage());
+        cart.setPrice(cartDto.getPrice());
+        cart.setQuantity(cartDto.getQuantity());
+        return cart;
     }
 }

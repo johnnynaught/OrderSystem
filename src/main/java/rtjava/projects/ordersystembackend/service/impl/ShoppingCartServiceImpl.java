@@ -3,96 +3,101 @@ package rtjava.projects.ordersystembackend.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rtjava.projects.ordersystembackend.dto.ShoppingCartDto;
-import rtjava.projects.ordersystembackend.entity.Product;
 import rtjava.projects.ordersystembackend.entity.ShoppingCart;
 import rtjava.projects.ordersystembackend.exception.ResourceNotFoundException;
 import rtjava.projects.ordersystembackend.mapper.ShoppingCartMapper;
-import rtjava.projects.ordersystembackend.repository.ProductRepository;
 import rtjava.projects.ordersystembackend.repository.ShoppingCartRepository;
 import rtjava.projects.ordersystembackend.service.ShoppingCartService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     private final ShoppingCartRepository cartRepository;
-    private final ProductRepository productRepository;
 
     @Autowired
-    public ShoppingCartServiceImpl(ShoppingCartRepository cartRepository, ProductRepository productRepository) {
+    public ShoppingCartServiceImpl(ShoppingCartRepository cartRepository) {
         this.cartRepository = cartRepository;
-        this.productRepository = productRepository;
     }
 
     @Override
     public ShoppingCartDto addToCart(ShoppingCartDto cartDto) {
-        // Convert the DTO to entity
-        ShoppingCart cartItem = ShoppingCartMapper.mapToShoppingCart(cartDto);
+        // Find the product in the cart
+        ShoppingCart existingCartItem = cartRepository.findByProductId(cartDto.getProductId());
 
-        // 1) Look up current product price
-        Product product = productRepository.findById(cartItem.getProductId())
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found with ID: " + cartItem.getProductId()));
+        if (existingCartItem != null) {
+            // Update quantity and save
+            existingCartItem.setQuantity(existingCartItem.getQuantity() + cartDto.getQuantity());
+            cartRepository.save(existingCartItem);
 
-        // 2) Calculate totalPrice = quantity * product's current price
-        Double price = product.getPrice();
-        Integer qty = cartItem.getQuantity();
-        cartItem.setTotalPrice(price * qty);
+            // Return updated cart item
+            return ShoppingCartMapper.mapToShoppingCartDto(existingCartItem);
+        } else {
+            // Create a new cart item
+            ShoppingCart newCartItem = new ShoppingCart(
+                    cartDto.getProductId(),
+                    cartDto.getTitle(),
+                    cartDto.getImage(),
+                    cartDto.getPrice(),
+                    cartDto.getQuantity()
+            );
 
-        // 3) Save the item in DB
-        ShoppingCart savedItem = cartRepository.save(cartItem);
+            // Save the new item
+            ShoppingCart savedItem = cartRepository.save(newCartItem);
 
-        // 4) Convert entity back to DTO
-        return ShoppingCartMapper.mapToShoppingCartDto(savedItem);
-    }
-
-    @Override
-    public ShoppingCartDto updateCartItem(Long id, ShoppingCartDto cartDto) {
-        // 1) Find the existing cart item
-        ShoppingCart existingCartItem = cartRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Cart item not found with ID: " + id));
-
-        // 2) Update relevant fields from the DTO (including productId, quantity, etc.)
-        existingCartItem.setCartId(cartDto.getCartId());
-        existingCartItem.setUserId(cartDto.getUserId());
-        existingCartItem.setProductId(cartDto.getProductId());
-        existingCartItem.setQuantity(cartDto.getQuantity());
-
-        // 3) Retrieve the product price again (in case the product changed or the price was updated)
-        Product product = productRepository.findById(cartDto.getProductId())
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found with ID: " + cartDto.getProductId()));
-
-        // 4) Recalculate the totalPrice using the new quantity (and/or new product, if changed)
-        Double updatedPrice = product.getPrice() * existingCartItem.getQuantity();
-        existingCartItem.setTotalPrice(updatedPrice);
-
-        // 5) Save the updated cart item
-        ShoppingCart updatedItem = cartRepository.save(existingCartItem);
-
-        // 6) Convert entity back to DTO
-        return ShoppingCartMapper.mapToShoppingCartDto(updatedItem);
-    }
-
-    @Override
-    public ShoppingCartDto getCartItemById(Long id) {
-        ShoppingCart cartItem = cartRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Cart item not found with id: " + id));
-        return ShoppingCartMapper.mapToShoppingCartDto(cartItem);
+            // Return the new cart item
+            return ShoppingCartMapper.mapToShoppingCartDto(savedItem);
+        }
     }
 
     @Override
     public List<ShoppingCartDto> getAllCartItems() {
-        List<ShoppingCart> cartItems = cartRepository.findAll();
-        return cartItems.stream()
+        return cartRepository.findAll().stream()
                 .map(ShoppingCartMapper::mapToShoppingCartDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public void deleteCartItem(Long id) {
-        ShoppingCart cartItem = cartRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Cart item not found with id: " + id));
-        cartRepository.delete(cartItem);
+    public void removeCartItem(Long productId) {
+        // Find the product in the cart
+        ShoppingCart cartItem = cartRepository.findByProductId(productId);
+        // Check if the product exists
+        if (cartItem != null) {
+            cartRepository.delete(cartItem); // Remove the product from the cart
+        } else {
+            throw new ResourceNotFoundException("Product not found in the cart with ID: " + productId);
+        }
     }
+
+
+    @Override
+    public double calculateTotalAmount() {
+        return cartRepository.findAll().stream()
+                .mapToDouble(cartItem -> cartItem.getPrice() * cartItem.getQuantity())
+                .sum();
+    }
+
+    @Override
+    public int calculateCount() {
+        return cartRepository.findAll().stream()
+                .mapToInt(ShoppingCart::getQuantity) // Sum up the quantity of each item
+                .sum();
+    }
+
+
+    @Override
+    public void submitOrder() {
+        // Logic to process the order and clear the cart
+        List<ShoppingCart> cartItems = cartRepository.findAll();
+        if (cartItems.isEmpty()) {
+            throw new RuntimeException("Cart is empty. Cannot submit an order.");
+        }
+        // Logic to create an order, e.g., save to an `Order` table
+        // Clear the cart after processing the order
+        cartRepository.deleteAll(cartItems);
+    }
+
 }

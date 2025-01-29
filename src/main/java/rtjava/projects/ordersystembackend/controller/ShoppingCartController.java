@@ -21,39 +21,41 @@ public class ShoppingCartController {
         this.cartService = cartService;
     }
 
-    // CREATE
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<ShoppingCartDto> addToCart(@RequestBody ShoppingCartDto cartDto) {
         ShoppingCartDto savedItem = cartService.addToCart(cartDto);
         return new ResponseEntity<>(savedItem, HttpStatus.CREATED);
     }
 
-    // READ by ID
-    @GetMapping("/{id}")
-    public ResponseEntity<ShoppingCartDto> getCartItemById(@PathVariable Long id) {
-        ShoppingCartDto cartDto = cartService.getCartItemById(id);
-        return ResponseEntity.ok(cartDto);
-    }
-
-    // READ all
     @GetMapping
     public ResponseEntity<List<ShoppingCartDto>> getAllCartItems() {
         List<ShoppingCartDto> cartItems = cartService.getAllCartItems();
         return ResponseEntity.ok(cartItems);
     }
 
-    // UPDATE
-    @PutMapping("/{id}")
-    public ResponseEntity<ShoppingCartDto> updateCartItem(@PathVariable Long id,
-                                                          @RequestBody ShoppingCartDto cartDto) {
-        ShoppingCartDto updatedItem = cartService.updateCartItem(id, cartDto);
-        return ResponseEntity.ok(updatedItem);
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<Void> removeCartItem(@PathVariable Long productId) {
+        cartService.removeCartItem(productId);
+        return ResponseEntity.noContent().build();
     }
 
-    // DELETE
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteCartItem(@PathVariable Long id) {
-        cartService.deleteCartItem(id);
-        return ResponseEntity.ok("Successfully deleted cart item " + id);
+    @GetMapping("/total")
+    public ResponseEntity<Double> calculateTotalAmount() {
+        double totalAmount = cartService.calculateTotalAmount();
+        return ResponseEntity.ok(totalAmount);
     }
+
+    @GetMapping("/count")
+    public ResponseEntity<Double> calculateCount() {
+        double count = cartService.calculateCount();
+        return ResponseEntity.ok(count);
+    }
+
+    @PostMapping("/submit")
+    public ResponseEntity<String> submitOrder() {
+        cartService.submitOrder(); // Logic for submitting the order
+        return ResponseEntity.ok("Order submitted successfully.");
+    }
+
 }
+

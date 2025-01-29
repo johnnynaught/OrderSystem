@@ -1,71 +1,63 @@
 package rtjava.projects.ordersystembackend.dto;
 
 public class ShoppingCartDto {
-    private Long id;           // primary key in DB
-    private Long cartId;       // logical identifier for the cart
-    private Long userId;       // user ID who owns the cart
-    private Long productId;    // product ID for this row
-    private Integer quantity;  // how many units of the product in the cart
-    private Double totalPrice; // quantity * product's current price
 
+    private Long productId;
+    private String title;
+    private String image;
+    private Double price;
+    private Integer quantity;
+
+    // Constructors
     public ShoppingCartDto() {
     }
 
-    public ShoppingCartDto(Long id, Long cartId, Long userId, Long productId,
-                           Integer quantity, Double totalPrice) {
-        this.id = id;
-        this.cartId = cartId;
-        this.userId = userId;
+    public ShoppingCartDto(Long productId, String title, String image, Double price, Integer quantity) {
         this.productId = productId;
+        this.title = title;
+        this.image = image;
+        this.price = price;
         this.quantity = quantity;
-        this.totalPrice = totalPrice;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public Long getCartId() {
-        return cartId;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
+    // Getters and Setters
     public Long getProductId() {
         return productId;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public Double getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setCartId(Long cartId) {
-        this.cartId = cartId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
     }
 
     public void setProductId(Long productId) {
         this.productId = productId;
     }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
+    public String getTitle() {
+        return title;
     }
 
-    public void setTotalPrice(Double totalPrice) {
-        this.totalPrice = totalPrice;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 }

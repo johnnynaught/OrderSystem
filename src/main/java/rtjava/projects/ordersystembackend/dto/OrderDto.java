@@ -1,71 +1,66 @@
 package rtjava.projects.ordersystembackend.dto;
 
-public class OrderDto {
-    private Long id;                // primary key in the DB
-    private Long orderId;           // logical identifier for the entire order
-    private Long userId;            // ID of the user who placed the order
-    private Long productId;         // product ID for this row
-    private Integer quantity;       // how many units of the product
-    private Double singleProductPrice; // price at the time of ordering
+import java.time.LocalDateTime;
+import java.util.List;
 
+public class OrderDto {
+    private Long id; // Order ID
+    private Long userId; // User ID who placed the order
+    private LocalDateTime orderTime; // Order time
+    private Double totalPrice; // Total price of the order
+    private List<OrderItemDto> items; // List of items in the order
+
+    // No-argument constructor
     public OrderDto() {
     }
 
-    public OrderDto(Long id, Long orderId, Long userId, Long productId,
-                    Integer quantity, Double singleProductPrice) {
+    // All-arguments constructor
+    public OrderDto(Long id, Long userId, LocalDateTime orderTime, Double totalPrice, List<OrderItemDto> items) {
         this.id = id;
-        this.orderId = orderId;
         this.userId = userId;
-        this.productId = productId;
-        this.quantity = quantity;
-        this.singleProductPrice = singleProductPrice;
+        this.orderTime = orderTime;
+        this.totalPrice = totalPrice;
+        this.items = items;
     }
 
+    // Getters and Setters
     public Long getId() {
         return id;
-    }
-
-    public Long getOrderId() {
-        return orderId;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public Long getProductId() {
-        return productId;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public Double getSingleProductPrice() {
-        return singleProductPrice;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
+    public Long getUserId() {
+        return userId;
     }
 
     public void setUserId(Long userId) {
         this.userId = userId;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public LocalDateTime getOrderTime() {
+        return orderTime;
     }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
+    public void setOrderTime(LocalDateTime orderTime) {
+        this.orderTime = orderTime;
     }
 
-    public void setSingleProductPrice(Double singleProductPrice) {
-        this.singleProductPrice = singleProductPrice;
+    public Double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(Double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public List<OrderItemDto> getItems() {
+        return items;
+    }
+
+    public void setItems(List<OrderItemDto> items) {
+        this.items = items;
     }
 }

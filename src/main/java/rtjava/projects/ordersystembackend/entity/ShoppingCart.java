@@ -8,52 +8,33 @@ public class ShoppingCart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;                // Primary key for the cart row
+    private Long id;
 
-    private Long cartId;            // Logical cart identifier (multiple rows can share the same cartId)
-    private Long userId;            // ID of the user who owns this cart
-    private Long productId;         // ID of the product added to the cart
-    private Integer quantity;       // Quantity of the product in the cart
-    private Double totalPrice;      // The total price (quantity * product's current price)
+    private Long productId;     // ID of the product
+    private String title;       // Product name
+    private String image;       // Product image URL
+    private Double price;       // Product unit price
+    private Integer quantity;   // Quantity of the product
 
-    // No-argument constructor
+    // Constructors
     public ShoppingCart() {
     }
 
-    // All-arguments constructor
-    public ShoppingCart(Long id, Long cartId, Long userId, Long productId, Integer quantity, Double totalPrice) {
-        this.id = id;
-        this.cartId = cartId;
-        this.userId = userId;
+    public ShoppingCart(Long productId, String title, String image, Double price, Integer quantity) {
         this.productId = productId;
+        this.title = title;
+        this.image = image;
+        this.price = price;
         this.quantity = quantity;
-        this.totalPrice = totalPrice;
     }
 
     // Getters and Setters
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getCartId() {
-        return cartId;
-    }
-
-    public void setCartId(Long cartId) {
-        this.cartId = cartId;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
     }
 
     public Long getProductId() {
@@ -64,19 +45,35 @@ public class ShoppingCart {
         this.productId = productId;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
     public Integer getQuantity() {
         return quantity;
     }
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
-    }
-
-    public Double getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(Double totalPrice) {
-        this.totalPrice = totalPrice;
     }
 }

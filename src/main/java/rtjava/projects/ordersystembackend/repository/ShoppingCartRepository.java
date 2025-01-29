@@ -3,9 +3,10 @@ package rtjava.projects.ordersystembackend.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import rtjava.projects.ordersystembackend.entity.ShoppingCart;
 
-public interface ShoppingCartRepository extends JpaRepository<ShoppingCart, Long> {
+import java.util.List;
+import java.util.Optional;
 
-    // e.g., custom queries if needed
-    // List<ShoppingCart> findByUserId(Long userId);
+public interface ShoppingCartRepository extends JpaRepository<ShoppingCart, Long> {
+    ShoppingCart findByProductId(Long productId);
     // List<ShoppingCart> findByCartId(Long cartId);
 }

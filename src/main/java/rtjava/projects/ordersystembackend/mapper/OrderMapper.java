@@ -3,27 +3,34 @@ package rtjava.projects.ordersystembackend.mapper;
 import rtjava.projects.ordersystembackend.dto.OrderDto;
 import rtjava.projects.ordersystembackend.entity.Order;
 
+import java.util.stream.Collectors;
+
 public class OrderMapper {
 
+    // Convert Order entity to OrderDto
+    public static OrderDto mapToOrderDto(Order order) {
+        return new OrderDto(
+                order.getId(),
+                order.getUserId(),
+                order.getOrderTime(),
+                order.getTotalPrice(),
+                order.getItems().stream()
+                        .map(OrderItemMapper::mapToOrderItemDto)
+                        .collect(Collectors.toList())
+        );
+    }
+
+    // Convert OrderDto to Order entity
     public static Order mapToOrder(OrderDto orderDto) {
         Order order = new Order();
         order.setId(orderDto.getId());
-        order.setOrderId(orderDto.getOrderId());
         order.setUserId(orderDto.getUserId());
-        order.setProductId(orderDto.getProductId());
-        order.setQuantity(orderDto.getQuantity());
-        order.setSingleProductPrice(orderDto.getSingleProductPrice());
+        order.setOrderTime(orderDto.getOrderTime());
+        order.setTotalPrice(orderDto.getTotalPrice());
+        order.setItems(orderDto.getItems().stream()
+                .map(OrderItemMapper::mapToOrderItem)
+                .peek(orderItem -> orderItem.setOrder(order)) // Set the parent order
+                .collect(Collectors.toList()));
         return order;
-    }
-
-    public static OrderDto mapToOrderDto(Order order) {
-        OrderDto orderDto = new OrderDto();
-        orderDto.setId(order.getId());
-        orderDto.setOrderId(order.getOrderId());
-        orderDto.setUserId(order.getUserId());
-        orderDto.setProductId(order.getProductId());
-        orderDto.setQuantity(order.getQuantity());
-        orderDto.setSingleProductPrice(order.getSingleProductPrice());
-        return orderDto;
     }
 }
