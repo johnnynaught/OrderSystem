@@ -21,7 +21,7 @@ jobs:
           cache: 'maven'
 
       - name: Build Project
-        run: mvn clean install -Dmaven.test.skip=true #-DskipTests
+        run: mvn clean install -DskipTests #-Dmaven.test.skip=true
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v3
