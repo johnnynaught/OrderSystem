@@ -2,7 +2,7 @@ name: Deploy to AWS
 
 on:
   push:
-    branches: [ deploy-to-ecs]
+    branches: [ aws]
 
 jobs:
   build-and-test:
