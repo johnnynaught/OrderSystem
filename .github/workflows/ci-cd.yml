@@ -33,6 +33,8 @@ jobs:
       - name: Log in to Amazon ECR
         id: ecr-login
         uses: aws-actions/amazon-ecr-login@v1
+        with:
+          mask-password: 'true'
 
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
@@ -42,7 +44,7 @@ jobs:
           # The tag can be any identifier, here we use the full commit SHA
           IMAGE_TAG: ${{ github.sha }}
           # The name of your ECR repository (make sure this is created in AWS)
-          ECR_REPOSITORY: onlineshop
+          # ECR_REPOSITORY: onlineshop
         run: |
           # Build the Docker image using the Dockerfile in the current directory (.)
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
