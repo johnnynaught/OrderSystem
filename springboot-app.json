@@ -1,0 +1,68 @@
+{
+  "taskDefinitionArn": "arn:aws:ecs:us-east-1:236353101860:task-definition/springboot-app:1",
+  "containerDefinitions": [
+    {
+      "name": "springboot-example",
+      "image": "236353101860.dkr.ecr.us-east-1.amazonaws.com/onlineshop",
+      "cpu": 0,
+      "portMappings": [
+        {
+          "name": "springboot-example-8080-tcp",
+          "containerPort": 8080,
+          "hostPort": 8080,
+          "protocol": "tcp",
+          "appProtocol": "http"
+        }
+      ],
+      "essential": true,
+      "environment": [],
+      "environmentFiles": [],
+      "mountPoints": [],
+      "volumesFrom": [],
+      "ulimits": [],
+      "systemControls": []
+    }
+  ],
+  "family": "springboot-app",
+  "taskRoleArn": "arn:aws:iam::236353101860:role/ecsrole",
+  "executionRoleArn": "arn:aws:iam::236353101860:role/ecsrole",
+  "networkMode": "awsvpc",
+  "revision": 1,
+  "volumes": [],
+  "status": "ACTIVE",
+  "requiresAttributes": [
+    {
+      "name": "com.amazonaws.ecs.capability.ecr-auth"
+    },
+    {
+      "name": "com.amazonaws.ecs.capability.task-iam-role"
+    },
+    {
+      "name": "ecs.capability.execution-role-ecr-pull"
+    },
+    {
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+    },
+    {
+      "name": "ecs.capability.task-eni"
+    }
+  ],
+  "placementConstraints": [],
+  "compatibilities": [
+    "EC2",
+    "FARGATE"
+  ],
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "cpu": "1024",
+  "memory": "3072",
+  "runtimePlatform": {
+    "cpuArchitecture": "X86_64",
+    "operatingSystemFamily": "LINUX"
+  },
+  "registeredAt": "2025-02-09T01:00:42.838Z",
+  "registeredBy": "arn:aws:iam::236353101860:root",
+  "enableFaultInjection": false,
+  "tags": []
+}
