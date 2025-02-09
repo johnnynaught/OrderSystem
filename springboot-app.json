@@ -1,9 +1,9 @@
 {
-  "taskDefinitionArn": "arn:aws:ecs:us-east-1:236353101860:task-definition/springboot-app:1",
+  "taskDefinitionArn": "arn:aws:ecs:us-east-1:236353101860:task-definition/springboot-app:4",
   "containerDefinitions": [
     {
       "name": "springboot-example",
-      "image": "236353101860.dkr.ecr.us-east-1.amazonaws.com/onlineshop",
+      "image": "236353101860.dkr.ecr.us-east-1.amazonaws.com/onlineshop:24fbe612f58007a826790c5dd6f36099714075be",
       "cpu": 0,
       "portMappings": [
         {
@@ -16,10 +16,8 @@
       ],
       "essential": true,
       "environment": [],
-      "environmentFiles": [],
       "mountPoints": [],
       "volumesFrom": [],
-      "ulimits": [],
       "systemControls": []
     }
   ],
@@ -27,7 +25,7 @@
   "taskRoleArn": "arn:aws:iam::236353101860:role/ecsrole",
   "executionRoleArn": "arn:aws:iam::236353101860:role/ecsrole",
   "networkMode": "awsvpc",
-  "revision": 1,
+  "revision": 4,
   "volumes": [],
   "status": "ACTIVE",
   "requiresAttributes": [
@@ -61,7 +59,7 @@
     "cpuArchitecture": "X86_64",
     "operatingSystemFamily": "LINUX"
   },
-  "registeredAt": "2025-02-09T01:00:42.838Z",
+  "registeredAt": "2025-02-09T15:08:39.509Z",
   "registeredBy": "arn:aws:iam::236353101860:root",
   "enableFaultInjection": false,
   "tags": []
