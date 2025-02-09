@@ -16,6 +16,10 @@
       ],
       "essential": true,
       "environment": [],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "secretOptions": null
+      },
       "mountPoints": [],
       "volumesFrom": [],
       "systemControls": []
